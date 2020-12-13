@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf8">
+	<title>WebSockets Test</title>
+</head>
+<body>
+
+<script type="text/javascript">
+
+// Websockets tutorial: 
+
+// Definition:
+var socket = new WebSocket("ws://echo.websocket.org");
+
+// send method: (sending data to server)
+function sendmessage(message){
+	var msg = message || "Hello websockets!";
+	console.log("Sending message: "+msg);
+	// Note − Sending the messages is only possible if the connection is open.
+	if (socket.readyState === WebSocket.OPEN){
+	socket.send(msg);
+   }
+}
+
+function closeConnection(){
+	if (socket.readyState === WebSocket.OPEN){
+      socket.close();
+      // It is also possible to close the connection deliberately with the help of following code snippet −
+      // socket.close(1000,”Deliberate Connection”);
+   }else{
+   	console.log("Error closing websocket!Websocket state is not OPEN!");
+   }
+}
+
+// Events: (open,onmessage,onclose,onerror)
+
+socket.onopen = function(event) {
+   console.log("socket open event is fired! (socket.onopen style)")
+}
+socket.addEventListener("open",function(event){
+  console.log("socket open event is fired!(socket.addEventListener style)");
+  console.log(event);
+})
+
+socket.onerror = function(event) {
+   console.log("socket onerror event fired! (socket.onerror style)");
+}
+socket.addEventListener("error",function(event){
+  console.log("socket error event is fired!(socket.addEventListener style)");
+  console.log(event);
+})
+
+socket.onmessage = function(event) {
+   console.log("socket onmessage event fired! (socket.onmessage style)");
+}
+socket.addEventListener("message",function(event){
+  console.log("socket message event is fired!(socket.addEventListener style)");
+  console.log("Incoming message details: \ntype: "+typeof(event.data)+", data: "+event.data);
+})
+
+
+
+socket.onclose = function(event) {
+   console.log("socket onclose event fired! (socket.onclose style)");
+}
+socket.addEventListener("close",function(event){
+  console.log("socket close event is fired!(socket.addEventListener style)");
+  console.log("event code is:"+event.code+" (1000 means connection closed normally");
+
+  // Checking network availability via the navigator object: 
+  // if (navigator.onLine) {
+  //    alert("You are Online");
+  // }else {
+  //    alert("You are Offline");
+  // }
+
+  if (!navigator.onLine) {
+     console.log("You seem to be offline. Please connect to the Internet and try again.");
+  }
+})
+
+
+// Websockets data transmission
+// Web socket protocol supports text and binary data. Web sockets support only one binary format at a time. This means when you add onmessage event, your data is either a string or arrayBuffer. If you're gonna use binary data, you must declare on your websocket object explicitly like this: 
+// socket.binaryType = ”arrayBuffer”;
+// socket.binaryType = ”blob”;
+
+// you can check incoming message types like this: 
+//    if(typeOf event.data === String ) {
+//    	...
+//    }
+// or
+//    if(event.data instanceof ArrayBuffer ){
+//    	...
+//    }
+
+
+
+
+</script>
+
+
+</body>
+</html>
